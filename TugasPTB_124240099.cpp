@@ -56,3 +56,55 @@ void cariNIM(PtbNode* akar, int nim) {
     else
         cariNIM(akar->kanan, nim);
 }
+
+PtbNode* nilaiterkecil(PtbNode* node) {
+    while (node && node->kiri != nullptr)
+        node = node->kiri;
+    return node;
+}
+
+PtbNode* hapus(PtbNode* akar, int nim) {
+    if (!akar) return nullptr;
+
+    if (nim < akar->data.nim)
+        akar->kiri = hapus(akar->kiri, nim);
+    else if (nim > akar->data.nim)
+        akar->kanan = hapus(akar->kanan, nim);
+    else {
+        if (!akar->kiri) {
+            PtbNode* bantu = akar->kanan;
+            delete akar;
+            return bantu;
+        } else if (!akar->kanan) {
+            PtbNode* bantu = akar->kiri;
+            delete akar;
+            return bantu;
+        }
+        PtbNode* bantu = nilaiterkecil(akar->kanan);
+        akar->data = bantu->data;
+        akar->kanan = hapus(akar->kanan, bantu->data.nim);
+    }
+    return akar;
+}
+
+PtbNode* bacaDariFile(const char* filename) {
+    FILE* file = fopen(filename, "rb");
+    if (!file) return nullptr;
+
+    PtbNode* akar = nullptr;
+    Mhs bantu;
+
+    while (fread(&bantu, sizeof(Mhs), 1, file) == 1) {
+        akar = sisip(akar, bantu);
+    }
+
+    fclose(file);
+    return akar;
+}
+
+void clear(){
+    cout << "\nTekan tombol apapun untuk melanjutkan";
+    cin.ignore();
+    cin.ignore();
+    system("cls");
+}
