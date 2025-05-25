@@ -108,3 +108,88 @@ void clear(){
     cin.ignore();
     system("cls");
 }
+
+int main() {
+    PtbNode* akar = bacaDariFile("mahasiswa.dat");
+
+    int pilih;
+    do {
+        cout << "\n=== MENU MANAJEMEN MAHASISWA ===\n";
+        cout << "1. Tambah Mahasiswa\n";
+        cout << "2. Cari Mahasiswa\n";
+        cout << "3. Tampilkan Semua Mahasiswa\n";
+        cout << "4. Hapus Mahasiswa\n";
+        cout << "5. Simpan Data ke File\n";
+        cout << "6. Keluar\n";
+        cout << "Pilihan: ";
+        cin >> pilih;
+
+        switch(pilih) {
+            case 1: {
+                Mhs m;
+                cout << "Masukkan NIM: ";
+                cin >> m.nim;
+                cin.ignore();
+                cout << "Masukkan Nama: ";
+                cin.getline(m.nama, 50);
+                akar = sisip(akar, m);
+                cout << "Data berhasil ditambahkan.\n";
+                clear();
+                break;
+            }
+            
+            case 2: {
+                int nim;
+                cout << "Masukkan NIM yang dicari: ";
+                cin >> nim;
+                cariNIM(akar, nim);
+                clear();
+                break;
+            }
+            
+            case 3: {
+                cout << "\nDaftar Mahasiswa (urut NIM):\n";
+                inorder(akar);
+                clear();
+                break;
+            }
+            
+            case 4: {
+                int nim;
+                cout << "Masukkan NIM yang akan dihapus: ";
+                cin >> nim;
+                akar = hapus(akar, nim);
+                cout << "Data berhasil dihapus\n";
+                clear();
+
+                break;
+            }
+            
+            case 5: {
+                FILE* file = fopen("mahasiswa.dat", "wb");
+                if (!file) {
+                    cout << "Gagal membuka file untuk penyimpanan.\n";
+                } else {
+                    simpankeFile(akar, file);
+                    fclose(file);
+                    cout << "Data berhasil disimpan ke file.\n";
+                }
+                clear();
+                break;
+            }
+            
+            case 6: {
+                cout << "Program selesai.\n";
+                break;
+            }
+            
+            default: {
+                cout << "Pilihan tidak valid. Silakan coba lagi.\n";
+                clear();
+                break;
+            }
+        }
+    } while (pilih != 6);
+
+    return 0;
+}
