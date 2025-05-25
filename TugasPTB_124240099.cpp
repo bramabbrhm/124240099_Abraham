@@ -32,3 +32,27 @@ void inorder(PtbNode* akar) {
     cout << akar->data.nim << " - " << akar->data.nama << endl;
     inorder(akar->kanan);
 }
+
+void simpankeFile(PtbNode* akar, FILE* file) {
+    if (akar == nullptr) return;
+    simpankeFile(akar->kiri, file);
+    fwrite(&akar->data, sizeof(Mhs), 1, file);
+    simpankeFile(akar->kanan, file);
+}
+
+void cariNIM(PtbNode* akar, int nim) {
+    if (akar == nullptr) {
+        cout << "NIM tidak ditemukan.\n";
+        return;
+    }
+    if (nim == akar->data.nim) {
+        cout << "Data ditemukan:\n";
+        cout << "NIM: " << akar->data.nim << endl;
+        cout << "Nama: " << akar->data.nama << endl;
+        return;
+    }
+    if (nim < akar->data.nim)
+        cariNIM(akar->kiri, nim);
+    else
+        cariNIM(akar->kanan, nim);
+}
